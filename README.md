@@ -1,2 +1,2 @@
 # foreigndepartment.scrapper
-Downloader for podcast from dzialzagraniczny.pl
+Podcast downloader from dzialzagraniczny.pl
