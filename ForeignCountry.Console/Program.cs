@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace ForeignCountry.Console
 {
@@ -67,9 +72,9 @@ namespace ForeignCountry.Console
             using (var fs = new FileStream(Path.Combine(OutputMp3Path, fileName), FileMode.CreateNew))
             {
                 await response.Content.CopyToAsync(fs);
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Saved {fileName}");
-                Console.ResetColor();
+                System.Console.ForegroundColor = ConsoleColor.Green;
+                System.Console.WriteLine($"Saved {fileName}");
+                System.Console.ResetColor();
             }
         }
     }
