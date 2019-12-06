@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ForeignDailyNews.Scrapper\ForeignDailyNews.Scrapper.csproj" />
     <ProjectReference Include="..\HowToSaveMoney.Scrapper\HowToSaveMoney.Scrapper.csproj" />
+    <ProjectReference Include="..\Scrapper.Common\Scrapper.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -13,4 +13,8 @@
     <PackageReference Include="System.Security.Permissions" Version="4.6.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Scrapper.Common\Scrapper.Common.csproj" />
+  </ItemGroup>
+
 </Project>

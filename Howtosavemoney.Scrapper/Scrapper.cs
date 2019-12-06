@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp;
 using AngleSharp.Dom;
+using Scrapper.Common;
 
 namespace HowToSaveMoney.Scrapper
 {
-    public class Scrapper
+    public class Scrapper : IScrapper
     {
         private readonly IBrowsingContext _context;
 
@@ -46,7 +47,7 @@ namespace HowToSaveMoney.Scrapper
             return link?.GetAttribute("href");
         }
 
-        public async Task<IEnumerable<string>> ReadAllPodcastLinks(string url)
+        public async Task<IEnumerable<string>> GetAllArticleUrls(string url)
         {
             var urls = new List<string>();
             var visitedUrls = new List<string>();
@@ -65,7 +66,7 @@ namespace HowToSaveMoney.Scrapper
             return urls.Distinct();
         }
 
-        public IEnumerable<string> ReadPageLinks(IDocument document)
+        private IEnumerable<string> ReadPageLinks(IDocument document)
         {
             var hrefsSelector = "div.teaser > h2.entry-title > a";
             var hrefs = document.QuerySelectorAll(hrefsSelector);

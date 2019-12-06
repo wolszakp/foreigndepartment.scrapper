@@ -1,37 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Interactions;
+using Scrapper.Common;
 
-namespace Selenium.Scrapper
+namespace ForeignDailyNews.Scrapper
 {
-    public class SeleniumScrapper
+    public class Scrapper : IScrapper
     {
         private readonly string _browserPath;
         private readonly ChromeOptions _options;
 
-        public SeleniumScrapper()
+        public Scrapper()
         {
             _browserPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             _options = new ChromeOptions();
             _options.AddArguments("--window-position=0,0",  "--window-size=1,1");
-            // _options.AddArguments("--start-maximized");
         }
 
-        public IEnumerable<string> GetDownloadUrlsFromArticlePages(IEnumerable<string> articleUrls)
+        public async Task<IEnumerable<string>> GetDownloadUrlsFromArticlePages(IEnumerable<string> articleUrls)
         {
             var downloadUrls = new List<string>();
             foreach(var item in articleUrls) 
             {
-                var downloadUrl = GetDownloadUrlFromArticlePage(item);
+                var downloadUrl = await GetDownloadUrlFromArticlePage(item);
                 if( downloadUrl != null) 
                 {
                     downloadUrls.Add(downloadUrl);
                     continue;
-                
                 }
                 
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -41,23 +40,14 @@ namespace Selenium.Scrapper
             return downloadUrls;
         }
 
-        public string GetDownloadUrlFromArticlePage(string baseUrl)
+        public Task<string> GetDownloadUrlFromArticlePage(string baseUrl)
         {
-            //var url = @"https://www.dzialzagraniczny.pl/2019/11/jak-z-trauma-radza-sobie-tysiace-bosniaczek-zgwalconych-podczas-wojny-domowej-dzial-zagraniczny-podcast021/";
-
             using(var driver = new ChromeDriver(_browserPath, _options))
             {
                 driver.Navigate().GoToUrl(baseUrl);
                 var wait = new OpenQA.Selenium.Support.UI.WebDriverWait(driver, TimeSpan.FromSeconds(10.00));
                 // check for complete load
                 wait.Until(driver1 => ((IJavaScriptExecutor)driver).ExecuteScript("return document.readyState").Equals("complete"));
-
-                // var playerDiv = driver.FindElementsByCssSelector("div.row.player");
-                // var commentsDiv = driver.FindElementById("comments");
-                // var moreArticelsDiv = driver.FindElementsByCssSelector("div.td-more-articles-box");
-                // var scrollAction = new Actions(driver);
-                // scrollAction.MoveToElement(commentsDiv);
-                // scrollAction.Perform();
 
                 var iframes = driver.FindElementsByCssSelector("iframe");
                 var src = iframes.FirstOrDefault()?.GetAttribute("src");
@@ -88,29 +78,29 @@ namespace Selenium.Scrapper
                 var playList = JArray.FromObject(playlistObject);
                 var downloadUrl = playList.FirstOrDefault()?.Value<string>("download_link");
                 
-                return downloadUrl;
+                return Task.FromResult(downloadUrl);
             }
         }
 
-        public IEnumerable<string> ReadAllPodcastLinks(string url)
+        public Task<IEnumerable<string>> GetAllArticleUrls(string entryUrl)
         {
-            var urls = new List<string>();
+            var urls = new HashSet<string>();
             var visitedUrls = new List<string>();
-            var nextUrl = url;
+            var nextUrl = entryUrl;
             using(var driver = new ChromeDriver(_browserPath, _options))
             do
                 {
                     visitedUrls.Add(nextUrl);
                     driver.Navigate().GoToUrl(nextUrl);
-                    urls.AddRange(ReadPageLinks(driver));
+                    urls.AddRange(ReadArticleUrls(driver));
 
-                    nextUrl = ReadNextPageLink(driver);
+                    nextUrl = ReadNextPageUrl(driver);
                 } while (!visitedUrls.Contains(nextUrl));
 
-            return urls;
+            return Task.FromResult(urls.AsEnumerable());
         }
 
-        private string ReadNextPageLink(ChromeDriver driver)
+        private string ReadNextPageUrl(ChromeDriver driver)
         {
             var nextPageSelector = "div.page-nav.td-pb-padding-side > a";
             var nextPage = driver.FindElementsByCssSelector(nextPageSelector);
@@ -118,7 +108,7 @@ namespace Selenium.Scrapper
             return nextUrl;
         }
 
-        private IEnumerable<string> ReadPageLinks(ChromeDriver driver)
+        private IEnumerable<string> ReadArticleUrls(ChromeDriver driver)
         {
             var hrefsSelector = "div.td_module_5.td_module_wrap.td-animation-stack > div.td-item-details.td-category-small > h3.entry-title.td-module-title > a";
             var hrefs = driver.FindElementsByCssSelector(hrefsSelector);
