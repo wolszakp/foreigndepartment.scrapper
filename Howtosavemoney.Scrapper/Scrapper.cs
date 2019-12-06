@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AngleSharp;
 using AngleSharp.Dom;
 
-namespace Howtosavemoney.Scrapper
+namespace HowToSaveMoney.Scrapper
 {
     public class Scrapper
     {

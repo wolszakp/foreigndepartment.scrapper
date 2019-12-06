@@ -6,16 +6,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.13.0" />
-    <PackageReference Include="AngleSharp.Js" Version="0.13.0" />
     <PackageReference Include="CommandLineParser" Version="2.6.0" />
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="77.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Angle.Scrapper\Angle.Scrapper.csproj" />
-    <ProjectReference Include="..\Selenium.Scrapper\Selenium.Scrapper.csproj" />
-    <ProjectReference Include="..\Howtosavemoney.Scrapper\Howtosavemoney.Scrapper.csproj" />
+    <ProjectReference Include="..\ForeignDailyNews.Scrapper\ForeignDailyNews.Scrapper.csproj" />
+    <ProjectReference Include="..\HowToSaveMoney.Scrapper\HowToSaveMoney.Scrapper.csproj" />
   </ItemGroup>
 
 </Project>

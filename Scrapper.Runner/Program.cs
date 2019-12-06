@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Howtosavemoney.Scrapper;
+using HowToSaveMoney.Scrapper;
 
-namespace ForeignCountry.Console
+namespace Scrapper.Runner
 {
     class Program
     {
@@ -54,7 +54,7 @@ namespace ForeignCountry.Console
 
             //var seleniumScrapper = new Selenium.Scrapper.SeleniumScrapper();
             //var downloadUrls = seleniumScrapper.GetDownloadUrlsFromArticlePages(podcastPagesUrls);            
-            var scrapper = new Scrapper();
+            var scrapper = new HowToSaveMoney.Scrapper.Scrapper();
             var downloadUrls = await scrapper.GetDownloadUrlsFromArticlePages(podcastPagesUrls);
 
             await File.WriteAllLinesAsync(Mp3LinksFileName, downloadUrls);
@@ -71,7 +71,7 @@ namespace ForeignCountry.Console
 
             // var seleniumScrapper = new Selenium.Scrapper.SeleniumScrapper();
             // var podcastPagesUrls = seleniumScrapper.ReadAllPodcastLinks(url);
-            var scrapper = new Scrapper();
+            var scrapper = new HowToSaveMoney.Scrapper.Scrapper();
             var podcastPagesUrls = await scrapper.ReadAllPodcastLinks(url);
             await File.WriteAllLinesAsync(PageLinksFileName, podcastPagesUrls);
             return podcastPagesUrls;
