@@ -15,6 +15,7 @@ namespace Scrapper.Runner
             IScrapper scrapper = null;
             string entryUrl = null;
             string outputDirectory = null;
+            
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(o =>{
                     switch(o.Type)
@@ -26,7 +27,7 @@ namespace Scrapper.Runner
 
                         case PodcastType.ForeignDailyNews:
                             scrapper = new ForeignDailyNews.Scrapper.Scrapper();
-                            entryUrl = "https://www.dzialzagraniczny.pl/category/podcasty/";
+                            entryUrl = "http://www.dzialzagraniczny.pl/category/podcasty/";
                             break;
                         default:
                             throw new System.ArgumentNullException(nameof(Options.Type));
@@ -38,7 +39,7 @@ namespace Scrapper.Runner
             if(scrapper!= null) 
             {
                 var downloader = new Downloader(scrapper, outputDirectory, entryUrl);
-                downloader.Run().GetAwaiter().GetResult();            
+                downloader.Run().GetAwaiter().GetResult();
             }
         }
     }
