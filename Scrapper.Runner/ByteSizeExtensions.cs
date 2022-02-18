@@ -9,9 +9,9 @@ namespace Scrapper.Runner
             Byte, KB, MB, GB, TB, PB, EB, ZB, YB
         }
 
-        public static string ToSize(this Int64 value, SizeUnits unit)
+        public static string ToSize(this long value, SizeUnits unit)
         {
-            return (value / (double)Math.Pow(1024, (Int64)unit)).ToString("0.00");
+            return (value / Math.Pow(1024, (long)unit)).ToString("0.00");
         }
     }
 }

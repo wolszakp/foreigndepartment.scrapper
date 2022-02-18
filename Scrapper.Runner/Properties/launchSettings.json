@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Scrapper.Runner": {
+      "commandName": "Project",
+      "commandLineArgs": "-t ForeignDailyNews -o c:\\work\\foreignDailyNews\\"
+    }
+  }
+}
